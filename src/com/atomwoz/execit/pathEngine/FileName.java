@@ -52,7 +52,14 @@ public class FileName
 
 	public String getFileFullPath()
 	{
-		return fullPath + name + extension;
+		if (!name.equals(fullPath))
+		{
+			return fullPath + name + extension;
+		}
+		else
+		{
+			return name + extension;
+		}
 	}
 
 	public String getProtocol()

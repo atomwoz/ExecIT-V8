@@ -34,8 +34,14 @@ public class TokenizeTest extends CommandBase
 			println(a);
 		}
 		println("----------------");
-		println("Alline " + command + " " + argue);
+		println("Alline " + args.getRawLine());
 		println("Argue " + argue);
+		println("----------------");
+		println("-----START FLAgs---");
+		for (var a : args.getFlags())
+		{
+			println(a);
+		}
 		return 0;
 
 	}

@@ -22,13 +22,13 @@ class CommandTest
 		VirtualDiskRegister.createAndMount("TEST");
 		WriteCommand wc = new WriteCommand(Thread.currentThread(), "write");
 		wc.doCommand(new StartArgue("write", new String[]
-		{ "Lorem ipsum ip😊😋sum Loremść", "%TEST/tisch.txt" }, null, null, null));
+		{ "Lorem ipsum ip😊😋sum Loremść", "%TEST/tisch.txt" }, null, null, null, null));
 		var a = (VirtualFile) VirtualDiskRegister.getElementByAbsoluteName("TEST/tisch.txt", false);
 		assertEquals(a.readAll(), "Lorem ipsum ip😊😋sum Loremść");
 
 		VirtualDiskRegister.getVolumeByName("TEST").makeDirectory("a");
 		wc.doCommand(new StartArgue("write", new String[]
-		{ "Lorem ipsum ip😊😋sum Loremść", "%TEST/a/tisch.txt" }, null, null, null));
+		{ "Lorem ipsum ip😊😋sum Loremść", "%TEST/a/tisch.txt" }, null, null, null, null));
 		a = (VirtualFile) VirtualDiskRegister.getElementByAbsoluteName("TEST/a/tisch.txt", false);
 		assertEquals(a.readAll(), "Lorem ipsum ip😊😋sum Loremść");
 

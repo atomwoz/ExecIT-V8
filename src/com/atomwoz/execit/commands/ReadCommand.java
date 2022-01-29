@@ -26,7 +26,16 @@ public class ReadCommand extends CommandBase
 	@Override
 	public int doCommand(StartArgue args) throws CommandRuntimeExcepiton
 	{
-		FileName whereRead = PathEngine.pathToFileName(args.getArgues()[0]);
+		FileName whereRead;
+		try
+		{
+			whereRead = PathEngine.pathToFileName(args.getArgues()[0]);
+		}
+		catch (IOException e1)
+		{
+			error(e1.getMessage());
+			return 1;
+		}
 		Charset charset = Charset.forName("UTF-8");
 		if (args.getArgues().length > 1)
 		{

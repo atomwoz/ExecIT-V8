@@ -3,6 +3,8 @@ package com.atomwoz.execit.base;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
 
+import com.atomwoz.execit.pathEngine.PathEngine;
+
 public class Main
 {
 	static SystemInfo sysInfo;
@@ -16,7 +18,7 @@ public class Main
 			{
 
 				RuntimeInfo.makeShellIdle();
-				String prompt = sysInfo.getUserDir() + "> ";
+				String prompt = PathEngine.getLoc() + "> ";
 				AttributedStringBuilder builder = new AttributedStringBuilder()
 						.style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN)).append(prompt);
 				String readedLine;
@@ -77,9 +79,7 @@ public class Main
 					{
 						throw new InputNotSpecifiedOrder();
 					}
-
 				}
-
 			}
 			catch (CommandNotExist e)
 			{

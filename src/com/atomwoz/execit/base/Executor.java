@@ -1,7 +1,6 @@
 package com.atomwoz.execit.base;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -83,7 +82,6 @@ public class Executor
 		// Remove flags from argues
 		parasedLines.removeIf(x -> x.name.isEmpty());
 
-		BasicIO.getInstance().println(Arrays.toString(startFlags.toArray(String[]::new)));
 		String[] tokens = new String[parasedLines.size()];
 		for (int j = 0; j < parasedLines.size(); j++)
 		{
@@ -91,6 +89,11 @@ public class Executor
 		}
 		boolean isExist = false;
 
+		inputArgue = "";
+		for (var x : tokens)
+		{
+			inputArgue += x + " ";
+		}
 		// TODO Add start values support
 		for (Pair<String[], Class<? extends CommandBase>> cmdToCheck : mapper)
 		{
@@ -99,9 +102,8 @@ public class Executor
 				if (command.equals(inputCommand))
 				{
 					isExist = true;
-					// FIXME Remove start flags from argue line
 					Starter commandStarter = new Starter(tokens, observersLine, cmdToCheck.second, inputCommand,
-							inputArgue, muteIO, async, startFlags);
+							inputArgue, muteIO, async, startFlags, line);
 					Thread commandThread = new Thread(commandStarter, inputCommand);
 
 					// Throwing when command not exist
@@ -316,13 +318,14 @@ class Starter extends Thread
 	private String inputCommand;
 	private String inputArgue;
 	private String observerLine;
+	private String allLine;
 	private boolean muteIO;
 	private boolean async;
 	private int stopCode = -1;
 	private Set<String> startFlags;
 
 	public Starter(String[] tokens, String observerLine, Class<? extends CommandBase> commandToRun, String inputCommand,
-			String inputArgue, boolean muteIO, boolean async, Set<String> startFlags)
+			String inputArgue, boolean muteIO, boolean async, Set<String> startFlags, String allline)
 	{
 		this.tokens = tokens;
 		this.inputCommand = inputCommand;
@@ -332,6 +335,7 @@ class Starter extends Thread
 		this.rawClass = commandToRun;
 		this.observerLine = observerLine;
 		this.startFlags = startFlags;
+		this.allLine = allline;
 
 	}
 
@@ -437,7 +441,8 @@ class Starter extends Thread
 			try
 			{
 				// Starting command
-				stopCode = commandToRun.doCommand(new StartArgue(inputCommand, tokens, inputArgue, startFlags, null));
+				stopCode = commandToRun
+						.doCommand(new StartArgue(inputCommand, tokens, inputArgue, startFlags, null, allLine));
 			}
 			catch (CommandRuntimeExcepiton e)
 			{

@@ -1,5 +1,7 @@
 package com.atomwoz.execit.commands;
 
+import java.io.IOException;
+
 import com.atomwoz.execit.base.CommandBase;
 import com.atomwoz.execit.base.CommandRuntimeExcepiton;
 import com.atomwoz.execit.base.StartArgue;
@@ -22,8 +24,16 @@ public class WriteCommand extends CommandBase
 	public int doCommand(StartArgue args) throws CommandRuntimeExcepiton
 	{
 		String toWrite = args.getArgues()[0];
-		FileName whereWrite = PathEngine.pathToFileName(args.getArgues()[1]);
-
+		FileName whereWrite;
+		try
+		{
+			whereWrite = PathEngine.pathToFileName(args.getArgues()[1]);
+		}
+		catch (IOException e1)
+		{
+			error(e1.getMessage());
+			return 1;
+		}
 		switch (whereWrite.getType())
 		{
 			case VIRTUAL_FILE:
