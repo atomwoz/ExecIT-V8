@@ -1,10 +1,8 @@
 package com.atomwoz.execit.commands;
 
-import java.util.Set;
-
 import com.atomwoz.execit.base.CommandBase;
 import com.atomwoz.execit.base.CommandRuntimeExcepiton;
-import com.atomwoz.execit.base.StartFlag;
+import com.atomwoz.execit.base.StartArgue;
 
 public class YesCommand extends CommandBase
 {
@@ -14,9 +12,9 @@ public class YesCommand extends CommandBase
 	}
 
 	@Override
-	public int doCommand(String command, String[] argues, String argue, Set<StartFlag> startFlags)
-			throws CommandRuntimeExcepiton
+	public int doCommand(StartArgue args) throws CommandRuntimeExcepiton
 	{
+		String argue = args.getArgueLine();
 		if (!argue.isBlank())
 		{
 			while (true)
@@ -31,7 +29,6 @@ public class YesCommand extends CommandBase
 				println("yes");
 			}
 		}
-
 	}
 
 }

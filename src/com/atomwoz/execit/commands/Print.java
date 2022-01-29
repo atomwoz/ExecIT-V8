@@ -1,10 +1,8 @@
 package com.atomwoz.execit.commands;
 
-import java.util.Set;
-
 import com.atomwoz.execit.base.CommandBase;
 import com.atomwoz.execit.base.CommandRuntimeExcepiton;
-import com.atomwoz.execit.base.StartFlag;
+import com.atomwoz.execit.base.StartArgue;
 
 public class Print extends CommandBase
 {
@@ -15,10 +13,9 @@ public class Print extends CommandBase
 	}
 
 	@Override
-	public int doCommand(String command, String[] argues, String argue, Set<StartFlag> startFlags)
-			throws CommandRuntimeExcepiton
+	public int doCommand(StartArgue args) throws CommandRuntimeExcepiton
 	{
-		println(argue);
+		println(args.getArgueLine());
 		return 0;
 	}
 

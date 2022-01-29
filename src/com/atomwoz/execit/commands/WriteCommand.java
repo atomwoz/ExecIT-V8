@@ -1,10 +1,8 @@
 package com.atomwoz.execit.commands;
 
-import java.util.Set;
-
 import com.atomwoz.execit.base.CommandBase;
 import com.atomwoz.execit.base.CommandRuntimeExcepiton;
-import com.atomwoz.execit.base.StartFlag;
+import com.atomwoz.execit.base.StartArgue;
 import com.atomwoz.execit.pathEngine.FileName;
 import com.atomwoz.execit.pathEngine.PathEngine;
 import com.atomwoz.execit.virtual.VirtualDiskException;
@@ -21,11 +19,10 @@ public class WriteCommand extends CommandBase
 	}
 
 	@Override
-	public int doCommand(String command, String[] argues, String argue, Set<StartFlag> startFlags)
-			throws CommandRuntimeExcepiton
+	public int doCommand(StartArgue args) throws CommandRuntimeExcepiton
 	{
-		String toWrite = argues[0];
-		FileName whereWrite = PathEngine.pathToFileName(argues[1]);
+		String toWrite = args.getArgues()[0];
+		FileName whereWrite = PathEngine.pathToFileName(args.getArgues()[1]);
 
 		switch (whereWrite.getType())
 		{

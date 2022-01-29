@@ -1,10 +1,8 @@
 package com.atomwoz.execit.commands;
 
-import java.util.Set;
-
 import com.atomwoz.execit.base.CommandBase;
 import com.atomwoz.execit.base.CommandRuntimeExcepiton;
-import com.atomwoz.execit.base.StartFlag;
+import com.atomwoz.execit.base.StartArgue;
 import com.atomwoz.execit.base.TerminalFunctions;
 import com.atomwoz.execit.virtual.VirtualDiskRegister;
 
@@ -19,13 +17,12 @@ public class MakeVolumeCommand extends CommandBase
 	}
 
 	@Override
-	public int doCommand(String command, String[] argues, String argue, Set<StartFlag> startFlags)
-			throws CommandRuntimeExcepiton
+	public int doCommand(StartArgue args) throws CommandRuntimeExcepiton
 	{
 		long capacity = 0;
-		if (argues.length >= 2)
+		if (args.getArgues().length >= 2)
 		{
-			var capacityCandidate = TerminalFunctions.stringToBytes(argues[1], true);
+			var capacityCandidate = TerminalFunctions.stringToBytes(args.getArgues()[1], true);
 			if (capacityCandidate != null)
 			{
 				capacity = capacityCandidate.longValue();
@@ -35,7 +32,7 @@ public class MakeVolumeCommand extends CommandBase
 				return 1;
 			}
 		}
-		String volName = argues[0];
+		String volName = args.getArgues()[0];
 		if (volName.isBlank())
 		{
 			io.printError("Volume name cannot be empty");

@@ -4,11 +4,10 @@ import java.io.IOException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.util.Formatter;
-import java.util.Set;
 
 import com.atomwoz.execit.base.CommandBase;
 import com.atomwoz.execit.base.CommandRuntimeExcepiton;
-import com.atomwoz.execit.base.StartFlag;
+import com.atomwoz.execit.base.StartArgue;
 import com.atomwoz.execit.base.TerminalFunctions;
 import com.atomwoz.execit.virtual.VirtualDiskRegister;
 
@@ -20,13 +19,13 @@ public class ShowDisks extends CommandBase
 	}
 
 	@Override
-	public int doCommand(String command, String[] argues, String argue, Set<StartFlag> startFlags)
-			throws CommandRuntimeExcepiton
+	public int doCommand(StartArgue args) throws CommandRuntimeExcepiton
 	{
 		try (Formatter format = new Formatter())
 		{
 			boolean all = false;
-			if (argues.length > 0)
+			String argue = args.getArgueLine();
+			if (args.getArgues().length > 0)
 			{
 				if (argue.equals("all") || argue.equals("everything"))
 				{
@@ -39,7 +38,6 @@ public class ShowDisks extends CommandBase
 					return 1;
 				}
 			}
-
 			// Real volumes
 
 			println("");
@@ -77,7 +75,6 @@ public class ShowDisks extends CommandBase
 					}
 				}
 			}
-
 			// VIrtual Volumes
 			if (!VirtualDiskRegister.isEmpty())
 			{
@@ -97,9 +94,7 @@ public class ShowDisks extends CommandBase
 						{
 							procentallocatedSpace = Math.round(10000 - (freeSpace / totalSpace) * 10000) / 100d;
 						}
-
 					}
-
 					println(vv.getKey() + " [-]");
 					println("\tVolume size: " + TerminalFunctions.simplifyMemory(totalSpace, false, false)
 							+ (showCapacity
@@ -113,7 +108,6 @@ public class ShowDisks extends CommandBase
 
 			// TODO Show all info
 		}
-
 		return 0;
 	}
 

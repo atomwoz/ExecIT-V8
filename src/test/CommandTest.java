@@ -6,6 +6,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 import com.atomwoz.execit.base.CommandRuntimeExcepiton;
+import com.atomwoz.execit.base.StartArgue;
 import com.atomwoz.execit.commands.WriteCommand;
 import com.atomwoz.execit.virtual.ElementNotExistOnVirtualVolumeException;
 import com.atomwoz.execit.virtual.VirtualDiskException;
@@ -20,14 +21,14 @@ class CommandTest
 	{
 		VirtualDiskRegister.createAndMount("TEST");
 		WriteCommand wc = new WriteCommand(Thread.currentThread(), "write");
-		wc.doCommand("write", new String[]
-		{ "Lorem ipsum ip😊😋sum Loremść", "%TEST/tisch.txt" }, null, null);
+		wc.doCommand(new StartArgue("write", new String[]
+		{ "Lorem ipsum ip😊😋sum Loremść", "%TEST/tisch.txt" }, null, null, null));
 		var a = (VirtualFile) VirtualDiskRegister.getElementByAbsoluteName("TEST/tisch.txt", false);
 		assertEquals(a.readAll(), "Lorem ipsum ip😊😋sum Loremść");
 
 		VirtualDiskRegister.getVolumeByName("TEST").makeDirectory("a");
-		wc.doCommand("write", new String[]
-		{ "Lorem ipsum ip😊😋sum Loremść", "%TEST/a/tisch.txt" }, null, null);
+		wc.doCommand(new StartArgue("write", new String[]
+		{ "Lorem ipsum ip😊😋sum Loremść", "%TEST/a/tisch.txt" }, null, null, null));
 		a = (VirtualFile) VirtualDiskRegister.getElementByAbsoluteName("TEST/a/tisch.txt", false);
 		assertEquals(a.readAll(), "Lorem ipsum ip😊😋sum Loremść");
 

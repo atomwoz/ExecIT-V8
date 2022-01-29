@@ -4,11 +4,10 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Set;
 
 import com.atomwoz.execit.base.CommandBase;
 import com.atomwoz.execit.base.CommandRuntimeExcepiton;
-import com.atomwoz.execit.base.StartFlag;
+import com.atomwoz.execit.base.StartArgue;
 import com.atomwoz.execit.net.NetWrapper;
 import com.atomwoz.execit.pathEngine.FileName;
 import com.atomwoz.execit.pathEngine.PathEngine;
@@ -25,20 +24,19 @@ public class ReadCommand extends CommandBase
 	}
 
 	@Override
-	public int doCommand(String command, String[] argues, String argue, Set<StartFlag> startFlags)
-			throws CommandRuntimeExcepiton
+	public int doCommand(StartArgue args) throws CommandRuntimeExcepiton
 	{
-		FileName whereRead = PathEngine.pathToFileName(argues[0]);
+		FileName whereRead = PathEngine.pathToFileName(args.getArgues()[0]);
 		Charset charset = Charset.forName("UTF-8");
-		if (argues.length > 1)
+		if (args.getArgues().length > 1)
 		{
 			try
 			{
-				charset = Charset.forName(argues[1]);
+				charset = Charset.forName(args.getArgues()[1]);
 			}
 			catch (Exception e)
 			{
-				error("Sorry but enconding " + argues[1] + " is not known");
+				error("Sorry but enconding " + args.getArgues()[1] + " is not known");
 				return 3;
 			}
 		}

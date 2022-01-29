@@ -52,7 +52,6 @@ public class Executor
 		{
 			inputCommand = sepCommand;
 		}
-
 		inputCommand = inputCommand.replace("_", "");
 		inputCommand = inputCommand.replace("-", "");
 
@@ -61,7 +60,6 @@ public class Executor
 		{
 			throw new CommandNotExist();
 		}
-
 		// variables effective final
 		parasedLines.remove(0);
 		String[] tokens = new String[parasedLines.size()];
@@ -69,6 +67,7 @@ public class Executor
 		boolean isExist = false;
 
 		// TODO Add StartFlag support
+		// TODO Add start values support
 		for (Pair<String[], Class<? extends CommandBase>> cmdToCheck : mapper)
 		{
 			for (String command : cmdToCheck.first)
@@ -85,7 +84,6 @@ public class Executor
 					{
 						throw new CommandNotExist();
 					}
-
 					RuntimeInfo.makeShellBusy(command);
 					// STARTING COMMAND
 					commandThread.start();
@@ -114,9 +112,7 @@ public class Executor
 					return commandStarter.getStopCode();
 				}
 			}
-
 		}
-
 		// Proceeding observers
 
 		return 0;
@@ -142,7 +138,6 @@ public class Executor
 	{
 		ArrayList<String> tokens = new ArrayList<>();
 		String toToken2 = toTokenize.strip() + "\"";
-		// String current = toToken2;
 		int lastDeletedPos = 0;
 		boolean isInApostrophe = false;
 
@@ -156,7 +151,6 @@ public class Executor
 			{
 				// Slicer
 				String sliced = toToken2.substring(lastDeletedPos + 1, i);
-				// sliced = deleteApostrophes(sliced);
 				if (!sliced.isEmpty())
 				{
 					if (!isInApostrophe)
@@ -164,8 +158,6 @@ public class Executor
 						sliced = sliced.strip();
 					}
 					tokens.add(sliced.replace("\\\"", "\""));
-					// current = toToken2.substring(i+1);
-
 				}
 				lastDeletedPos = i;
 			}
@@ -195,7 +187,6 @@ public class Executor
 				toReturn.deleteCharAt(i - offset);
 				offset++;
 			}
-
 		}
 		System.out.println(toReturn.toString());
 		return toReturn.toString();
@@ -244,7 +235,6 @@ class Observator implements Runnable
 			{
 				throw new ObserverNotExistException(name);
 			}
-
 		}
 	}
 
@@ -287,11 +277,8 @@ class Observator implements Runnable
 				};
 				Thread observerThread = new Thread(preparer, "Observer " + name);
 				observerThread.start();
-
 			}
-
 		}
-
 	}
 
 }
@@ -358,7 +345,6 @@ class Starter extends Thread
 			io.echo("Changing start mode to async");
 			async = true;
 		}
-
 		if (arguesCount < commandToRun.minimumArgues)
 		{
 			io.printError("This command must be run with at least " + commandToRun.minimumArgues
@@ -383,7 +369,6 @@ class Starter extends Thread
 			// THATS MAGIC !!! Create object of command
 			commandToRun = rawClass.getConstructor(Thread.class, String.class).newInstance(currentThread(),
 					inputCommand);
-
 		}
 		catch (Exception e)
 		{
@@ -409,9 +394,7 @@ class Starter extends Thread
 					return;
 				}
 				observerThread.start();
-
 			}
-
 			// Exception handler for not force quit app in exception in command
 			Thread.setDefaultUncaughtExceptionHandler((thread, throwable) ->
 			{
@@ -424,11 +407,10 @@ class Starter extends Thread
 			{
 				commandToRun.muteIO();
 			}
-
 			try
 			{
 				// Starting command
-				stopCode = commandToRun.doCommand(inputCommand, tokens, inputArgue, null);
+				stopCode = commandToRun.doCommand(new StartArgue(inputCommand, tokens, inputArgue, null, null));
 			}
 			catch (CommandRuntimeExcepiton e)
 			{
@@ -436,7 +418,6 @@ class Starter extends Thread
 						+ " command halted !!!");
 			}
 		}
-
 	}
 }
 

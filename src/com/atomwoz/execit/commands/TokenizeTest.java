@@ -1,11 +1,10 @@
 package com.atomwoz.execit.commands;
 
 import java.nio.charset.Charset;
-import java.util.Set;
 
 import com.atomwoz.execit.base.CommandBase;
 import com.atomwoz.execit.base.CommandRuntimeExcepiton;
-import com.atomwoz.execit.base.StartFlag;
+import com.atomwoz.execit.base.StartArgue;
 
 public class TokenizeTest extends CommandBase
 {
@@ -16,9 +15,11 @@ public class TokenizeTest extends CommandBase
 	}
 
 	@Override
-	public int doCommand(String command, String[] argues, String argue, Set<StartFlag> startFlags)
-			throws CommandRuntimeExcepiton
+	public int doCommand(StartArgue args) throws CommandRuntimeExcepiton
 	{
+		String command = args.getCommand();
+		String[] argues = args.getArgues();
+		String argue = args.getArgueLine();
 		println(Charset.availableCharsets().toString());
 		printInfo("Super ważna informacja");
 		printWarning("Uwaga !!!");
