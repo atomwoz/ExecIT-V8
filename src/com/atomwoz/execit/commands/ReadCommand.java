@@ -81,6 +81,7 @@ public class ReadCommand extends CommandBase
 					error("I can't read content of fille located in: " + path.toString());
 					return 2;
 				}
+				break;
 			case WEB_FILE:
 
 				String[] lines;
@@ -99,6 +100,7 @@ public class ReadCommand extends CommandBase
 				{
 					error("I can't read remote file located at: " + loc);
 				}
+				break;
 			default:
 				break;
 		}

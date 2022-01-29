@@ -1,8 +1,10 @@
 package com.atomwoz.execit.base;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 public class Executor
 {
@@ -29,6 +31,7 @@ public class Executor
 		HashSet<Pair<String[], Class<? extends CommandBase>>> mapper = NameMapper.getCommandRegister();
 		// HashMap<String,AbstractObserver> obervers = NameMapper.getObserverRegister();
 
+		// Parsing observers
 		int firstAppePos = line.indexOf('&');
 		String observersLine = null;
 		String sepCommand = null;
@@ -55,18 +58,39 @@ public class Executor
 		inputCommand = inputCommand.replace("_", "");
 		inputCommand = inputCommand.replace("-", "");
 
-		ArrayList<String> parasedLines = tokenizeInput(sepCommand);
+		// Parsing argues
+		ArrayList<LineArgue> parasedLines = tokenizeInput(sepCommand);
+		HashSet<String> startFlags = new HashSet<>();
 		if (parasedLines.size() < 1)
 		{
 			throw new CommandNotExist();
 		}
 		// variables effective final
 		parasedLines.remove(0);
+
+		// Start flag support
+		for (int j = 0; j < parasedLines.size(); j++)
+		{
+			var x = parasedLines.get(j);
+			String str = x.name;
+			if (!x.isInApo && str.startsWith("--"))
+			{
+				str = str.substring(2);
+				startFlags.add(str);
+				parasedLines.set(j, new LineArgue("", false));
+			}
+		}
+		// Remove flags from argues
+		parasedLines.removeIf(x -> x.name.isEmpty());
+
+		BasicIO.getInstance().println(Arrays.toString(startFlags.toArray(String[]::new)));
 		String[] tokens = new String[parasedLines.size()];
-		tokens = parasedLines.toArray(tokens);
+		for (int j = 0; j < parasedLines.size(); j++)
+		{
+			tokens[j] = parasedLines.get(j).toString();
+		}
 		boolean isExist = false;
 
-		// TODO Add StartFlag support
 		// TODO Add start values support
 		for (Pair<String[], Class<? extends CommandBase>> cmdToCheck : mapper)
 		{
@@ -75,8 +99,9 @@ public class Executor
 				if (command.equals(inputCommand))
 				{
 					isExist = true;
+					// FIXME Remove start flags from argue line
 					Starter commandStarter = new Starter(tokens, observersLine, cmdToCheck.second, inputCommand,
-							inputArgue, muteIO, async);
+							inputArgue, muteIO, async, startFlags);
 					Thread commandThread = new Thread(commandStarter, inputCommand);
 
 					// Throwing when command not exist
@@ -134,9 +159,9 @@ public class Executor
 		{ firstPart, secondPart };
 	}
 
-	public static ArrayList<String> tokenizeInput(String toTokenize)
+	public static ArrayList<LineArgue> tokenizeInput(String toTokenize)
 	{
-		ArrayList<String> tokens = new ArrayList<>();
+		ArrayList<LineArgue> tokens = new ArrayList<>();
 		String toToken2 = toTokenize.strip() + "\"";
 		int lastDeletedPos = 0;
 		boolean isInApostrophe = false;
@@ -157,7 +182,7 @@ public class Executor
 					{
 						sliced = sliced.strip();
 					}
-					tokens.add(sliced.replace("\\\"", "\""));
+					tokens.add(new LineArgue(sliced.replace("\\\"", "\""), isInApostrophe));
 				}
 				lastDeletedPos = i;
 			}
@@ -294,9 +319,10 @@ class Starter extends Thread
 	private boolean muteIO;
 	private boolean async;
 	private int stopCode = -1;
+	private Set<String> startFlags;
 
 	public Starter(String[] tokens, String observerLine, Class<? extends CommandBase> commandToRun, String inputCommand,
-			String inputArgue, boolean muteIO, boolean async)
+			String inputArgue, boolean muteIO, boolean async, Set<String> startFlags)
 	{
 		this.tokens = tokens;
 		this.inputCommand = inputCommand;
@@ -305,6 +331,7 @@ class Starter extends Thread
 		this.async = async;
 		this.rawClass = commandToRun;
 		this.observerLine = observerLine;
+		this.startFlags = startFlags;
 
 	}
 
@@ -410,7 +437,7 @@ class Starter extends Thread
 			try
 			{
 				// Starting command
-				stopCode = commandToRun.doCommand(new StartArgue(inputCommand, tokens, inputArgue, null, null));
+				stopCode = commandToRun.doCommand(new StartArgue(inputCommand, tokens, inputArgue, startFlags, null));
 			}
 			catch (CommandRuntimeExcepiton e)
 			{

@@ -6,6 +6,7 @@ public class PathEngine
 	{
 		FileType type;
 		path = path.replace('\\', '/');
+		path = path.replace("~", System.getProperty("user.home"));
 		String protocol = "";
 		if (path.contains("://"))
 		{
