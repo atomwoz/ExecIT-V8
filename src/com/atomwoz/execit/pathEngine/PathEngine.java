@@ -21,6 +21,8 @@ public class PathEngine
 		return currentLocation;
 	}
 
+	// FIXME Fix moving directrly to root disk (pwd and cd)
+	// FIXME Test changing directory
 	public static String resolvePath(String loc, FileTypes type) throws IOException
 	{
 		return blendPath(loc, false, false, false, type);

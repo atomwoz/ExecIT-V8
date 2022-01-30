@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import com.atomwoz.execit.commands.BackgroundCommand;
-import com.atomwoz.execit.commands.Buffertest;
+import com.atomwoz.execit.commands.ChageDirCommand;
 import com.atomwoz.execit.commands.MakeVolumeCommand;
 import com.atomwoz.execit.commands.Print;
 import com.atomwoz.execit.commands.PwdCommand;
@@ -45,9 +45,9 @@ class NameMapper implements Serializable
 		resolver.add(cmd(new String[]
 		{ "pwd", "path" }, PwdCommand.class));
 		resolver.add(cmd(new String[]
-		{ "buffer" }, Buffertest.class));
-		resolver.add(cmd(new String[]
 		{ "bg", "background" }, BackgroundCommand.class));
+		resolver.add(cmd(new String[]
+		{ "cd", "changedirectory" }, ChageDirCommand.class));
 		observerResolver.put("observe", new TestObserver());
 		observerResolver.put("timeout", new TimeoutObserver());
 		observerResolver.put("confirm", new ConfirmObserver());
