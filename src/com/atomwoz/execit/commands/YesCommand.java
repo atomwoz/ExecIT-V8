@@ -6,9 +6,9 @@ import com.atomwoz.execit.base.StartArgue;
 
 public class YesCommand extends CommandBase
 {
-	public YesCommand(Thread thread, String name)
+	public YesCommand(Thread thread, String name, Integer commandID)
 	{
-		super(thread, name);
+		super(thread, name, commandID);
 	}
 
 	@Override

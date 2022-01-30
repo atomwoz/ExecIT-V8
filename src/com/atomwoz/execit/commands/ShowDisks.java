@@ -13,9 +13,9 @@ import com.atomwoz.execit.virtual.VirtualDiskRegister;
 
 public class ShowDisks extends CommandBase
 {
-	public ShowDisks(Thread thread, String name)
+	public ShowDisks(Thread thread, String name, Integer commandID)
 	{
-		super(thread, name);
+		super(thread, name, commandID);
 	}
 
 	@Override

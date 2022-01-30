@@ -9,9 +9,9 @@ import com.atomwoz.execit.virtual.VirtualDiskRegister;
 public class MakeVolumeCommand extends CommandBase
 {
 
-	public MakeVolumeCommand(Thread thread, String name)
+	public MakeVolumeCommand(Thread thread, String name, Integer commandID)
 	{
-		super(thread, name);
+		super(thread, name, commandID);
 		minimumArgues = 1;
 		maximumArgues = 2;
 	}

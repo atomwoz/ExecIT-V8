@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import com.atomwoz.execit.commands.Buffertest;
 import com.atomwoz.execit.commands.MakeVolumeCommand;
 import com.atomwoz.execit.commands.Print;
+import com.atomwoz.execit.commands.PwdCommand;
 import com.atomwoz.execit.commands.ReadCommand;
 import com.atomwoz.execit.commands.ShowDisks;
 import com.atomwoz.execit.commands.TokenizeTest;
@@ -38,7 +40,11 @@ class NameMapper implements Serializable
 		resolver.add(cmd(new String[]
 		{ "write", "wr" }, WriteCommand.class));
 		resolver.add(cmd(new String[]
-		{ "read", "re" }, ReadCommand.class));
+		{ "read", "re", "cat" }, ReadCommand.class));
+		resolver.add(cmd(new String[]
+		{ "pwd", "path" }, PwdCommand.class));
+		resolver.add(cmd(new String[]
+		{ "buffer" }, Buffertest.class));
 		observerResolver.put("observe", new TestObserver());
 		observerResolver.put("timeout", new TimeoutObserver());
 		observerResolver.put("confirm", new ConfirmObserver());

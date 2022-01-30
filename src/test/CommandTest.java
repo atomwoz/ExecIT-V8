@@ -20,7 +20,7 @@ class CommandTest
 	void write() throws CommandRuntimeExcepiton, VirtualDiskException
 	{
 		VirtualDiskRegister.createAndMount("TEST");
-		WriteCommand wc = new WriteCommand(Thread.currentThread(), "write");
+		WriteCommand wc = new WriteCommand(Thread.currentThread(), "write", 1);
 		wc.doCommand(new StartArgue("write", new String[]
 		{ "Lorem ipsum ip😊😋sum Loremść", "%TEST/tisch.txt" }, null, null, null, null));
 		var a = (VirtualFile) VirtualDiskRegister.getElementByAbsoluteName("TEST/tisch.txt", false);

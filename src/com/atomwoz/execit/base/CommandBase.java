@@ -9,6 +9,7 @@ import java.io.IOException;
  * @author atwoz
  * 
  */
+//FIXME Replace int to Integer in all constructors
 public abstract class CommandBase extends Controllable implements Command
 {
 
@@ -25,21 +26,23 @@ public abstract class CommandBase extends Controllable implements Command
 	protected int minimumArgues = -1;
 	protected int maximumArgues = Integer.MAX_VALUE;
 
+	protected int commandID = -1;
+
 	protected String help = "";
 	protected String shortHelp = "";
 	protected String man = "";
 
-	/**
-	 * 
-	 */
+	private String asyncOutHeader = " <bootstrap:-2> ";
+
 	StartMode startMode = StartMode.BOTH;
 
-	public CommandBase(Thread thread, String name)
+	public CommandBase(Thread thread, String name, Integer ID)
 	{
 		io = BasicIO.getInstance();
 		commandThread = thread;
 		commandName = name;
-
+		commandID = ID;
+		asyncOutHeader = " <" + commandName + ":" + commandID + "> ";
 	}
 
 	protected boolean isIOMuted()
@@ -79,6 +82,10 @@ public abstract class CommandBase extends Controllable implements Command
 	{
 		if (!isMuted)
 		{
+			if (commandID >= 1)
+			{
+				str = asyncOutHeader + str;
+			}
 			io.print(str);
 		}
 	}
@@ -92,25 +99,34 @@ public abstract class CommandBase extends Controllable implements Command
 	{
 		if (!isMuted)
 		{
+			if (commandID >= 1)
+			{
+				str = asyncOutHeader + str;
+			}
 			io.println(str);
 		}
 	}
 
 	protected void println()
 	{
-		if (!isMuted)
-		{
-			io.println("");
-		}
+		println("");
 	}
 
 	protected void echo(String message)
 	{
+		if (commandID >= 1)
+		{
+			message = asyncOutHeader + message;
+		}
 		io.echo(message);
 	}
 
 	protected void printf(String str, Object... args)
 	{
+		if (commandID >= 1)
+		{
+			str = asyncOutHeader + str;
+		}
 		io.getOutput().printf(str, args);
 	}
 
@@ -118,6 +134,10 @@ public abstract class CommandBase extends Controllable implements Command
 	{
 		if (!isMuted)
 		{
+			if (commandID >= 1)
+			{
+				str = asyncOutHeader + str;
+			}
 			io.printInfo(str);
 		}
 	}
@@ -126,6 +146,10 @@ public abstract class CommandBase extends Controllable implements Command
 	{
 		if (!isMuted)
 		{
+			if (commandID >= 1)
+			{
+				str = asyncOutHeader + str;
+			}
 			io.printWarning(str);
 		}
 	}
@@ -134,6 +158,10 @@ public abstract class CommandBase extends Controllable implements Command
 	{
 		if (!isMuted)
 		{
+			if (commandID >= 1)
+			{
+				str = asyncOutHeader + str;
+			}
 			io.printSuccess(str);
 		}
 	}
@@ -142,6 +170,10 @@ public abstract class CommandBase extends Controllable implements Command
 	{
 		if (!isMuted)
 		{
+			if (commandID >= 1)
+			{
+				str = asyncOutHeader + str;
+			}
 			io.printlnBold(str);
 		}
 	}
@@ -153,6 +185,10 @@ public abstract class CommandBase extends Controllable implements Command
 	 */
 	protected void error(String message)
 	{
+		if (commandID >= 1)
+		{
+			message = " [" + commandName + ":" + commandID + "] " + message;
+		}
 		io.printError(message);
 	}
 

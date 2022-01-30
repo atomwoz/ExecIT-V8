@@ -8,10 +8,10 @@ import com.atomwoz.execit.base.StartArgue;
 
 public class TokenizeTest extends CommandBase
 {
-
-	public TokenizeTest(Thread thread, String name)
+	
+	public TokenizeTest(Thread thread, String name, Integer commandID)
 	{
-		super(thread, name);
+		super(thread, name, commandID);
 	}
 
 	@Override

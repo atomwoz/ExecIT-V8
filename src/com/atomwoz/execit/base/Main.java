@@ -16,18 +16,28 @@ public class Main
 		{
 			try
 			{
-
+				boolean ansiSupport = sysInfo.isSupportsAnsi();
 				RuntimeInfo.makeShellIdle();
-				String prompt = PathEngine.getLoc() + "> ";
-				AttributedStringBuilder builder = new AttributedStringBuilder()
-						.style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN)).append(prompt);
+				String user = sysInfo.getUserName();
+				String separator = " - ";
+				String prompt = PathEngine.getLoc();
+				AttributedStringBuilder builder = new AttributedStringBuilder().style(AttributedStyle.DEFAULT)
+						.append('[').style(AttributedStyle.BOLD.foreground(AttributedStyle.BLUE)).append(user)
+						.append(separator).style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN)).append(prompt)
+						.style(AttributedStyle.DEFAULT).append("]$> ");
 				String readedLine;
-				io.print(sysInfo.isSupportsAnsi() ? builder.toAnsi() : prompt);
+				synchronized (io)
+				{
 
-				readedLine = io.readLine();
-
+					io.print(ansiSupport ? builder.toAnsi() : builder.toString());
+					readedLine = io.readLine();
+					if (ansiSupport)
+						io.print("\u001B[0m");
+				}
 				if (readedLine.isBlank())
 				{
+					Thread.yield();
+					Thread.sleep(1);
 					continue;
 				}
 				String input = readedLine.substring(1).strip();
@@ -35,7 +45,7 @@ public class Main
 				{
 					Executor.executeCommand(input, false, false);
 				}
-				else if (readedLine.startsWith("-"))
+				else if (readedLine.startsWith("~"))
 				{
 					Executor.executeCommand(input, false, true);
 				}

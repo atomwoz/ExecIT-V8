@@ -17,9 +17,9 @@ import com.atomwoz.execit.virtual.VirtualDiskRegister;
 public class ReadCommand extends CommandBase
 {
 
-	public ReadCommand(Thread thread, String name)
+	public ReadCommand(Thread thread, String name, Integer commandID)
 	{
-		super(thread, name);
+		super(thread, name, commandID);
 		minimumArgues = 1;
 	}
 

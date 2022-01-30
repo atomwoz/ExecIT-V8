@@ -7,9 +7,9 @@ import com.atomwoz.execit.base.StartArgue;
 public class Print extends CommandBase
 {
 
-	public Print(Thread thread, String name)
+	public Print(Thread thread, String name, Integer commandID)
 	{
-		super(thread, name);
+		super(thread, name, commandID);
 	}
 
 	@Override

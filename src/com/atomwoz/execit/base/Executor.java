@@ -112,6 +112,7 @@ public class Executor
 						throw new CommandNotExist();
 					}
 					RuntimeInfo.makeShellBusy(command);
+
 					// STARTING COMMAND
 					commandThread.start();
 
@@ -395,11 +396,16 @@ class Starter extends Thread
 	public void run()
 	{
 		BasicIO io = BasicIO.getInstance();
+		int commandID = -1;
+		if (async)
+		{
+			commandID = GlobalControllableRegister.registerControllable(commandToRun);
+		}
 		try
 		{
 			// THATS MAGIC !!! Create object of command
-			commandToRun = rawClass.getConstructor(Thread.class, String.class).newInstance(currentThread(),
-					inputCommand);
+			commandToRun = rawClass.getConstructor(Thread.class, String.class, Integer.class)
+					.newInstance(currentThread(), inputCommand, commandID);
 		}
 		catch (Exception e)
 		{
@@ -410,6 +416,7 @@ class Starter extends Thread
 		// Check requirements
 		if (initCommand())
 		{
+
 			// Parsing observers
 			if (observerLine != null)
 			{
@@ -455,20 +462,11 @@ class Starter extends Thread
 
 class CommandNotExist extends Exception
 {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 762174614909038315L;
-
 }
 
 class ObserverNotExistException extends Exception
 {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -9216107357465998826L;
 
 	public ObserverNotExistException(String observerName)
@@ -480,10 +478,6 @@ class ObserverNotExistException extends Exception
 
 class MalformedInputException extends Exception
 {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2697138047821723409L;
 
 }

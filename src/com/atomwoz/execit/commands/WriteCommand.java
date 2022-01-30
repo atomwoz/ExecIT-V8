@@ -14,9 +14,9 @@ import com.atomwoz.execit.virtual.VolumeStorageLimitExceesed;
 public class WriteCommand extends CommandBase
 {
 
-	public WriteCommand(Thread thread, String name)
+	public WriteCommand(Thread thread, String name, Integer commandID)
 	{
-		super(thread, name);
+		super(thread, name, commandID);
 		minimumArgues = 2;
 	}
 

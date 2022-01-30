@@ -2,8 +2,8 @@ package com.atomwoz.execit.base;
 
 import static com.atomwoz.execit.base.IOConcurrencyUtills.addToBuffer;
 import static com.atomwoz.execit.base.IOConcurrencyUtills.clearBuffer;
-import static com.atomwoz.execit.base.IOConcurrencyUtills.getBufferIterator;
 import static com.atomwoz.execit.base.IOConcurrencyUtills.getSemaphoreValue;
+import static com.atomwoz.execit.base.IOConcurrencyUtills.getTable;
 import static com.atomwoz.execit.base.IOConcurrencyUtills.lockSempahore;
 import static com.atomwoz.execit.base.IOConcurrencyUtills.unLockSempahore;
 
@@ -33,7 +33,7 @@ public class BasicIO
 
 	char SEPARATOR_CHAR = '=';
 
-	public synchronized void print(String str)
+	public void print(String str)
 	{
 		if (getSemaphoreValue())
 		{
@@ -46,12 +46,12 @@ public class BasicIO
 		}
 	}
 
-	public synchronized void println(String str)
+	public void println(String str)
 	{
 		print(str + System.lineSeparator());
 	}
 
-	public synchronized void println(String[] array)
+	public void println(String[] array)
 	{
 		for (String s : array)
 		{
@@ -150,10 +150,18 @@ public class BasicIO
 		}
 	}
 
-	synchronized String readLine() throws IOException
+	String readLine() throws IOException
 	{
 		// printTerminalInfo("BUFFER LOCKED");
 		lockSempahore();
+		try
+		{
+			Thread.yield();
+			Thread.sleep(3);
+		}
+		catch (InterruptedException e)
+		{
+		}
 		String line = in.readLine();
 		// printTerminalInfo("BUFFER UnLOCKED");
 		unLockSempahore();
@@ -163,7 +171,7 @@ public class BasicIO
 
 	private synchronized void printAndClearBuffer()
 	{
-		for (String s : getBufferIterator())
+		for (String s : getTable())
 		{
 			out.print(s);
 		}
