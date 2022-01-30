@@ -399,7 +399,7 @@ class Starter extends Thread
 		int commandID = -1;
 		if (async)
 		{
-			commandID = GlobalControllableRegister.registerControllable(commandToRun);
+			commandID = GlobalControllableRegister.getNextId();
 		}
 		try
 		{
@@ -412,6 +412,10 @@ class Starter extends Thread
 			io.printError("Wow this error can't appear, WTF !!!, fix your extension code !!! \nERROR_MESSAGE: "
 					+ e.getMessage());
 			return;
+		}
+		if (async)
+		{
+			commandID = GlobalControllableRegister.registerControllable(commandToRun);
 		}
 		// Check requirements
 		if (initCommand())
@@ -455,6 +459,10 @@ class Starter extends Thread
 			{
 				io.printError("Command " + inputCommand + " meet error, exit message: " + e.getMessage()
 						+ " command halted !!!");
+			}
+			if (async)
+			{
+				GlobalControllableRegister.getById(commandID).stop();
 			}
 		}
 	}

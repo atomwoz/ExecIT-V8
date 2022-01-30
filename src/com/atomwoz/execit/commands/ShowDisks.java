@@ -27,7 +27,7 @@ public class ShowDisks extends CommandBase
 			String argue = args.getArgueLine();
 			if (args.getArgues().length > 0)
 			{
-				if (argue.equals("all") || argue.equals("everything"))
+				if (args.hasFlag("all"))
 				{
 					all = true;
 				}

@@ -8,9 +8,13 @@ public class GlobalControllableRegister
 	private static int lastID = 0;
 	private static HashMap<Integer, Controllable> register = new HashMap<>();
 
+	public static synchronized int getNextId()
+	{
+		return ++lastID;
+	}
+
 	public static synchronized int registerControllable(Controllable cntrl)
 	{
-		lastID++;
 		register.put(lastID, cntrl);
 		return lastID;
 	}

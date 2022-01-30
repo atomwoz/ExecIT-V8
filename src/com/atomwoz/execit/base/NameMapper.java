@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import com.atomwoz.execit.commands.BackgroundCommand;
 import com.atomwoz.execit.commands.Buffertest;
 import com.atomwoz.execit.commands.MakeVolumeCommand;
 import com.atomwoz.execit.commands.Print;
@@ -45,6 +46,8 @@ class NameMapper implements Serializable
 		{ "pwd", "path" }, PwdCommand.class));
 		resolver.add(cmd(new String[]
 		{ "buffer" }, Buffertest.class));
+		resolver.add(cmd(new String[]
+		{ "bg", "background" }, BackgroundCommand.class));
 		observerResolver.put("observe", new TestObserver());
 		observerResolver.put("timeout", new TimeoutObserver());
 		observerResolver.put("confirm", new ConfirmObserver());

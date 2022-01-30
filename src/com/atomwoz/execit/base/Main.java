@@ -114,11 +114,10 @@ public class Main
 
 	public static void main(String args[])
 	{
-
+		TerminalFunctions.clearScreen();
 		sysInfo = SystemInfo.getInfoFromSystem();
 		io = BasicIO.getInstance();
 		io.print("Starting..");
-		TerminalFunctions.clearScreen();
 		Runtime.getRuntime().addShutdownHook(new ShutdownHook());
 		io.println("Dev preview of new Execit v1.0.1");
 		io.printSeparator();

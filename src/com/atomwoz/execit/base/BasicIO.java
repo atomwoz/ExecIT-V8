@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
 
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
@@ -214,8 +215,8 @@ public class BasicIO
 	// Singleton stuff
 	private BasicIO()
 	{
-		out = new PrintWriter(System.out, true);
-		err = new PrintWriter(System.err, true);
+		out = new PrintWriter(System.out, true, Charset.forName("UTF-8"));
+		err = new PrintWriter(System.err, true, Charset.forName("UTF-8"));
 		in = new BufferedReader(new InputStreamReader(System.in));
 		sysInfo = SystemInfo.getInfoFromSystem();
 		if (sysInfo.isWindows())

@@ -16,6 +16,8 @@ public abstract class CommandBase extends Controllable implements Command
 	protected BasicIO io;
 	private Thread commandThread = null;
 	public String commandName = null;
+
+	public boolean alive = true;
 	/**
 	 * Set to true when child class can't write and read from standard IO
 	 */
@@ -32,7 +34,7 @@ public abstract class CommandBase extends Controllable implements Command
 	protected String shortHelp = "";
 	protected String man = "";
 
-	private String asyncOutHeader = " <bootstrap:-2> ";
+	private String asyncOutHeader = "(bootstrap:-2) ";
 
 	StartMode startMode = StartMode.BOTH;
 
@@ -42,7 +44,7 @@ public abstract class CommandBase extends Controllable implements Command
 		commandThread = thread;
 		commandName = name;
 		commandID = ID;
-		asyncOutHeader = " <" + commandName + ":" + commandID + "> ";
+		asyncOutHeader = "(" + commandName + ":" + commandID + ") ";
 	}
 
 	protected boolean isIOMuted()
@@ -212,13 +214,14 @@ public abstract class CommandBase extends Controllable implements Command
 	public boolean stop()
 	{
 		commandThread.interrupt();
+		alive = false;
 		return false;
 	}
 
 	@Override
 	public boolean isAlive()
 	{
-		return commandThread.isAlive();
+		return commandThread.isAlive() && alive;
 	}
 
 	@Override
