@@ -4,6 +4,7 @@ import com.atomwoz.execit.base.CommandBase;
 import com.atomwoz.execit.base.CommandRuntimeExcepiton;
 import com.atomwoz.execit.base.StartArgue;
 import com.atomwoz.execit.base.TerminalFunctions;
+import com.atomwoz.execit.virtual.VirtualDiskException;
 import com.atomwoz.execit.virtual.VirtualDiskRegister;
 
 public class MakeVolumeCommand extends CommandBase
@@ -42,7 +43,14 @@ public class MakeVolumeCommand extends CommandBase
 		{
 			volName = volName.substring(1);
 		}
-		VirtualDiskRegister.createAndMount(volName, capacity);
+		try
+		{
+			VirtualDiskRegister.createAndMount(volName, capacity);
+		}
+		catch (VirtualDiskException e)
+		{
+			error(e.getMessage());
+		}
 		echo("Created virtual volume, named " + volName + (capacity > 0 ? (", max size " + capacity + "B") : ""));
 		return 0;
 	}

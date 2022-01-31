@@ -14,6 +14,7 @@ public class ChageDirCommand extends CommandBase
 	{
 		super(thread, name, ID);
 		minimumArgues = 1;
+		maximumArgues = 1;
 	}
 
 	@Override

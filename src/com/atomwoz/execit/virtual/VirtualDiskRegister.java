@@ -8,7 +8,7 @@ public class VirtualDiskRegister
 {
 	private static HashMap<String, VirtualVolume> disks = new HashMap<String, VirtualVolume>();
 
-	public static void mount(String name, VirtualVolume volume)
+	public static void mount(String name, VirtualVolume volume) throws VirtualDiskException
 	{
 		if (!disks.containsKey(name))
 		{
@@ -16,18 +16,18 @@ public class VirtualDiskRegister
 		}
 		else
 		{
-			// TODO Exception on exists;
+			throw new VirtualDiskException("Volume with this name already exists");
 		}
 	}
 
-	public static void createAndMount(String name, long capacity)
+	public static void createAndMount(String name, long capacity) throws VirtualDiskException
 	{
 		VirtualFolder vf = new VirtualFolder(name, capacity);
 		VirtualVolume vv = new VirtualVolume(vf, capacity);
 		mount(name, vv);
 	}
 
-	public static void createAndMount(String name)
+	public static void createAndMount(String name) throws VirtualDiskException
 	{
 		createAndMount(name, -1);
 	}
@@ -94,5 +94,4 @@ public class VirtualDiskRegister
 	{
 		return disks.size() <= 0;
 	}
-	// TODO Add exception for same names volumes
 }

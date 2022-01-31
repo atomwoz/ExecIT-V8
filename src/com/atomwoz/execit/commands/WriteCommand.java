@@ -18,6 +18,7 @@ public class WriteCommand extends CommandBase
 	{
 		super(thread, name, commandID);
 		minimumArgues = 2;
+		maximumArgues = 2;
 	}
 
 	@Override

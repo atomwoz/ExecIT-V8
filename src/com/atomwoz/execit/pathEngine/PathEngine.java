@@ -21,7 +21,6 @@ public class PathEngine
 		return currentLocation;
 	}
 
-	// FIXME Fix moving directrly to root disk (pwd and cd)
 	// FIXME Test changing directory
 	public static String resolvePath(String loc, FileTypes type) throws IOException
 	{
@@ -273,10 +272,13 @@ public class PathEngine
 			}
 			if (absolute && file.exists())
 			{
-				File ready_file = new File(loc);
-				return ready_file.getCanonicalPath().toString();
+				if (!loc.endsWith(File.separator))
+				{
+					loc = loc.strip() + File.separator;
+				}
+				return loc;
 			}
-			if (file.exists() || (!file.exists() && force))
+			if (file.exists() || force)
 			{
 				// System.out.println(def_localization);
 				try

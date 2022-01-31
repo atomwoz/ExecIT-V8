@@ -6,6 +6,7 @@ import java.util.HashSet;
 
 import com.atomwoz.execit.commands.BackgroundCommand;
 import com.atomwoz.execit.commands.ChageDirCommand;
+import com.atomwoz.execit.commands.ClearScreenCommand;
 import com.atomwoz.execit.commands.MakeVolumeCommand;
 import com.atomwoz.execit.commands.Print;
 import com.atomwoz.execit.commands.PwdCommand;
@@ -48,6 +49,8 @@ class NameMapper implements Serializable
 		{ "bg", "background" }, BackgroundCommand.class));
 		resolver.add(cmd(new String[]
 		{ "cd", "changedirectory" }, ChageDirCommand.class));
+		resolver.add(cmd(new String[]
+		{ "cls", "clear" }, ClearScreenCommand.class));
 		observerResolver.put("observe", new TestObserver());
 		observerResolver.put("timeout", new TimeoutObserver());
 		observerResolver.put("confirm", new ConfirmObserver());

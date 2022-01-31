@@ -16,6 +16,7 @@ public class ShowDisks extends CommandBase
 	public ShowDisks(Thread thread, String name, Integer commandID)
 	{
 		super(thread, name, commandID);
+		maximumArgues = 0;
 	}
 
 	@Override

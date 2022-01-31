@@ -9,7 +9,6 @@ import java.io.IOException;
  * @author atwoz
  * 
  */
-//FIXME Replace int to Integer in all constructors
 public abstract class CommandBase extends Controllable implements Command
 {
 
@@ -158,14 +157,11 @@ public abstract class CommandBase extends Controllable implements Command
 
 	protected void printSuccess(String str)
 	{
-		if (!isMuted)
+		if (commandID >= 1)
 		{
-			if (commandID >= 1)
-			{
-				str = asyncOutHeader + str;
-			}
-			io.printSuccess(str);
+			str = asyncOutHeader + str;
 		}
+		io.printSuccess(str);
 	}
 
 	protected void printlnBold(String str)
@@ -189,7 +185,7 @@ public abstract class CommandBase extends Controllable implements Command
 	{
 		if (commandID >= 1)
 		{
-			message = " [" + commandName + ":" + commandID + "] " + message;
+			message = asyncOutHeader + message;
 		}
 		io.printError(message);
 	}

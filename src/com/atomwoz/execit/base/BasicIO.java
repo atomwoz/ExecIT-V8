@@ -129,7 +129,7 @@ public class BasicIO
 
 	void printSuccess(String info)
 	{
-		printCode(info, "[SUCCESS]", AttributedStyle.GREEN);
+		printCode(info, "[OK]", AttributedStyle.GREEN);
 	}
 
 	void printObserverInfo(String info)
