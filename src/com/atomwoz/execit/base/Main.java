@@ -20,7 +20,7 @@ public class Main
 				RuntimeInfo.makeShellIdle();
 				String user = sysInfo.getUserName();
 				String separator = " - ";
-				String prompt = PathEngine.getLoc();
+				String prompt = PathEngine.getLoc().getFileFullPath();
 				AttributedStringBuilder builder = new AttributedStringBuilder().style(AttributedStyle.DEFAULT)
 						.append('[').style(AttributedStyle.BOLD.foreground(AttributedStyle.BLUE)).append(user)
 						.append(separator).style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN)).append(prompt)
@@ -114,16 +114,19 @@ public class Main
 
 	public static void main(String args[])
 	{
-		TerminalFunctions.clearScreen();
-		io = BasicIO.getInstance();
-		io.print("Starting..");
 		sysInfo = SystemInfo.getInfoFromSystem();
 		Runtime.getRuntime().addShutdownHook(new ShutdownHook());
-		io.println("Dev preview of new Execit v1.0.1");
+		TerminalFunctions.clearScreen();
+		io = BasicIO.getInstance();
+		io.println("Dev preview of new Exec-It! v1.0.1");
 		io.printSeparator();
 		interpreter();
 	}
 
+	static
+	{
+		System.out.println("Starting..");
+	}
 }
 
 class InputNotSpecifiedOrder extends Exception

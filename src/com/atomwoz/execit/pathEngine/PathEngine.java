@@ -6,22 +6,37 @@ import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
 
 import com.atomwoz.execit.base.SystemInfo;
+import com.atomwoz.execit.virtual.VirtualDiskRegister;
 
 public class PathEngine
 {
-	private static String currentLocation = SystemInfo.getInfoFromSystem().getUserDir();
+	private static FileName currentLocation;
+
+	static
+	{
+		SystemInfo info = SystemInfo.getInfoFromSystem();
+		currentLocation = new FileName("", info.getUserDir(), "", false);
+	}
 
 	public static void changeDirectory(String loc) throws IOException
 	{
-		currentLocation = blendPath(loc, false, false, false, FileTypes.DIR);
+		FileName newPath = pathToFileName(loc);
+		if (newPath.getType() == FileType.VIRTUAL_FILE)
+		{
+			VirtualDiskRegister.getElementByAbsoluteName(newPath.getFileFullPath(), false);
+			currentLocation = newPath;
+		}
+		else
+		{
+			currentLocation = pathToFileName(blendPath(loc, false, false, false, FileTypes.DIR));
+		}
 	}
 
-	public static String getLoc()
+	public static FileName getLoc()
 	{
 		return currentLocation;
 	}
 
-	// FIXME Test changing directory
 	public static String resolvePath(String loc, FileTypes type) throws IOException
 	{
 		return blendPath(loc, false, false, false, type);
@@ -36,7 +51,6 @@ public class PathEngine
 	{
 		FileType type;
 		String protocol = "";
-		path = path.replace("\\", "/");
 		if (path.contains("://"))
 		{
 			int protocolPos = path.indexOf("://");
@@ -54,10 +68,17 @@ public class PathEngine
 			else
 			{
 				type = FileType.PHYSICAL_FILE;
-				path = blendPath(path, false, false, false, FileTypes.BOTH);
+				SystemInfo info = SystemInfo.getInfoFromSystem();
+				path = path.replace("~", info.getUserHome());
+				path = path.replace("#", info.getUserDir());
+				var root = Paths.get(currentLocation.getFileFullPath()).getRoot();
+				String toReplace = root != null ? root.toAbsolutePath().toString() : "";
+				path = path.replace("*", toReplace);
+				path = Paths.get(path).toString();
 			}
 		}
 		int pos = path.lastIndexOf(File.separator);
+
 		String fullPath = "";
 		String name;
 		String ext;
@@ -144,7 +165,7 @@ public class PathEngine
 	private static String blendPath(String loc, boolean force, boolean ignore_last, boolean pointToExecFile,
 			FileTypes type) throws IOException
 	{
-		String def_localization = currentLocation;
+		String def_localization = currentLocation.getFileFullPath();
 		File file;
 		boolean absolute = false;
 		SystemInfo sysInfo = SystemInfo.getInfoFromSystem();

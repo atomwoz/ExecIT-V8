@@ -442,6 +442,7 @@ class Starter extends Thread
 			{
 				io.printError(
 						"Unexcepted error in command " + inputCommand + " error message: " + throwable.getMessage());
+				// throwable.printStackTrace();
 			});
 
 			// Checking that we have to mute io

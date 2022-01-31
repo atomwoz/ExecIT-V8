@@ -26,7 +26,7 @@ public class ChageDirCommand extends CommandBase
 		}
 		catch (IOException e)
 		{
-			error("This is incorrect path to folder");
+			error(e.getMessage());
 			return 1;
 		}
 		return 0;

@@ -52,13 +52,16 @@ public class FileName
 
 	public String getFileFullPath()
 	{
-		if (!name.equals(fullPath))
+		String str1 = fullPath + name + extension;
+		String str2 = name + extension;
+
+		if (!str1.equals(str2 + str2))
 		{
-			return fullPath + name + extension;
+			return str1;
 		}
 		else
 		{
-			return name + extension;
+			return str2;
 		}
 	}
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import com.atomwoz.execit.base.CommandBase;
 import com.atomwoz.execit.base.CommandRuntimeExcepiton;
@@ -11,6 +12,7 @@ import com.atomwoz.execit.base.StartArgue;
 import com.atomwoz.execit.net.NetWrapper;
 import com.atomwoz.execit.pathEngine.FileName;
 import com.atomwoz.execit.pathEngine.PathEngine;
+import com.atomwoz.execit.pathEngine.PathEngine.FileTypes;
 import com.atomwoz.execit.virtual.VirtualDiskException;
 import com.atomwoz.execit.virtual.VirtualDiskRegister;
 
@@ -56,7 +58,9 @@ public class ReadCommand extends CommandBase
 				{
 					String data = VirtualDiskRegister.getFileByAbsoluteName(whereRead.getFileFullPath(), false)
 							.readAll();
+					println();
 					println(data);
+					println();
 					echo("Readed " + data.length() + " chars from " + whereRead.getFileFullPath() + " virtual path");
 				}
 				catch (VirtualDiskException e)
@@ -64,7 +68,7 @@ public class ReadCommand extends CommandBase
 					String cause = e.getMessage();
 					if (cause.isBlank())
 					{
-						error("The file you want to read is not accessible.");
+						error("The file you want to read is not accessible or not exist.");
 					}
 					else
 					{
@@ -74,7 +78,16 @@ public class ReadCommand extends CommandBase
 				}
 				break;
 			case PHYSICAL_FILE:
-				Path path = Path.of(whereRead.getFileFullPath());
+				Path path = null;
+				try
+				{
+					path = Paths.get(PathEngine.resolvePath(whereRead.getFileFullPath(), FileTypes.FILE));
+				}
+				catch (IOException e1)
+				{
+					error(e1.getMessage());
+					return 2;
+				}
 				try
 				{
 					var lines = Files.readAllLines(path, charset);

@@ -64,7 +64,15 @@ public class VirtualDiskRegister
 		}
 		else
 		{
-			throw new VirtualVolumeNotExist("We can't find volume " + path + " because that volume not exists.");
+			try
+			{
+				var vv = getVolumeByName(path).getRoot();
+				return vv;
+			}
+			catch (ElementNotExistOnVirtualVolumeException e)
+			{
+				throw new VirtualVolumeNotExist("We can't find volume " + path + " because that volume not exists.");
+			}
 		}
 	}
 

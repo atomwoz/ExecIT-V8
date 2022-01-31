@@ -163,7 +163,7 @@ class VirtualDiskTest
 	@Test
 	void testPhysicalAdvancedNames() throws IOException
 	{
-		FileName fn = PathEngine.pathToFileName("~/\\woz.jpg");
+		FileName fn = PathEngine.pathToFileName("~/\\\\woz.jpg");
 		assertEquals("C:\\Users\\atwoz\\woz.jpg", fn.getFileFullPath());
 
 	}
@@ -171,7 +171,7 @@ class VirtualDiskTest
 	@Test
 	void testVirtualBlendingNames() throws IOException
 	{
-		FileName fn = PathEngine.pathToFileName("http:\\\\google.com");
+		FileName fn = PathEngine.pathToFileName("http://google.com");
 		assertEquals("google.com", fn.getFullPath());
 		assertEquals("http", fn.getProtocol());
 		assertEquals("google", fn.getName());

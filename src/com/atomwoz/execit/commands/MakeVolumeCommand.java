@@ -37,11 +37,15 @@ public class MakeVolumeCommand extends CommandBase
 		if (volName.isBlank())
 		{
 			io.printError("Volume name cannot be empty");
-			return 1;
+			return 2;
 		}
 		if (volName.startsWith("%") && volName.length() >= 1)
 		{
 			volName = volName.substring(1);
+		}
+		if (volName.contains("://"))
+		{
+			io.printError("Volume name cannot contains (://) because of compatibility with URL's");
 		}
 		try
 		{
@@ -50,6 +54,7 @@ public class MakeVolumeCommand extends CommandBase
 		catch (VirtualDiskException e)
 		{
 			error(e.getMessage());
+			return 3;
 		}
 		echo("Created virtual volume, named " + volName + (capacity > 0 ? (", max size " + capacity + "B") : ""));
 		return 0;
