@@ -1,12 +1,18 @@
 package com.atomwoz.execit.commands;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import com.atomwoz.execit.base.CommandBase;
 import com.atomwoz.execit.base.CommandRuntimeExcepiton;
 import com.atomwoz.execit.base.StartArgue;
 import com.atomwoz.execit.pathEngine.FileName;
 import com.atomwoz.execit.pathEngine.PathEngine;
+import com.atomwoz.execit.pathEngine.PathEngine.FileTypes;
 import com.atomwoz.execit.virtual.VirtualDiskException;
 import com.atomwoz.execit.virtual.VirtualDiskRegister;
 import com.atomwoz.execit.virtual.VolumeStorageLimitExceesed;
@@ -35,13 +41,33 @@ public class WriteCommand extends CommandBase
 			error(e1.getMessage());
 			return 1;
 		}
+		Charset charset = Charset.forName("UTF-8");
+		boolean doNotCreate = args.hasFlag("no-create", "nc");
+		if (doNotCreate)
+		{
+			echo("Disabled file creation");
+		}
+		if (args.getArgues().length > 2)
+		{
+			try
+			{
+				charset = Charset.forName(args.getArgues()[2]);
+			}
+			catch (Exception e)
+			{
+				error("Sorry but enconding " + args.getArgues()[1] + " is not known");
+				return 3;
+			}
+		}
 		switch (whereWrite.getType())
 		{
 			case VIRTUAL_FILE:
 				try
 				{
-					VirtualDiskRegister.getFileByAbsoluteName(whereWrite.getFileFullPath(), true).write(toWrite);
+					VirtualDiskRegister.getFileByAbsoluteName(whereWrite.getFileFullPath(), !doNotCreate)
+							.write(toWrite);
 					echo("Writed " + toWrite.length() + " bytes to " + whereWrite.getFileFullPath() + " virtual path");
+					return 0;
 				}
 				catch (VolumeStorageLimitExceesed e)
 				{
@@ -61,18 +87,51 @@ public class WriteCommand extends CommandBase
 					}
 					return 2;
 				}
-				break;
 			case DEVICE:
 				break;
 			case PHYSICAL_FILE:
-				break;
+				Path path = null;
+				try
+				{
+					if (doNotCreate)
+					{
+						path = Paths.get(PathEngine.resolvePath(whereWrite.getFileFullPath(), FileTypes.FILE));
+					}
+					else
+					{
+						path = Paths.get(PathEngine.resolvePathForce(whereWrite.getFileFullPath(), FileTypes.FILE));
+					}
+				}
+				catch (IOException e1)
+				{
+					error(e1.getMessage());
+					return 2;
+				}
+				try
+				{
+					Files.writeString(path, toWrite, charset, (doNotCreate ? null : StandardOpenOption.CREATE),
+							StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
+					echo("Writed " + toWrite.length() + " bytes to " + whereWrite.getFileFullPath()
+							+ " real path, with encoding " + charset.displayName());
+					return 0;
+				}
+				catch (IOException e)
+				{
+					error(e.getMessage());
+					return 3;
+				}
+				catch (Exception e)
+				{
+					error("I can't write content to fille located in: " + path.toString());
+					return 2;
+				}
 			case WEB_FILE:
-				break;
+				error("You cannot write to remote file");
+				return 4;
 			default:
 				break;
-			// FIXME Inne opcje zapisywania i potestować
 		}
-		return 0;
+		return 10;
 	}
 
 }

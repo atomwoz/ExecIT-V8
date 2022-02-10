@@ -18,6 +18,8 @@ public class PathEngine
 		currentLocation = new FileName("", info.getUserDir(), "", false);
 	}
 
+	// FIXME: Fix when changing from default C:\Users\%username% to Desktop path is
+	// "\Desktop" instead of "~\Desktop"
 	public static void changeDirectory(String loc) throws IOException
 	{
 		FileName newPath = pathToFileName(loc);
@@ -40,6 +42,11 @@ public class PathEngine
 	public static String resolvePath(String loc, FileTypes type) throws IOException
 	{
 		return blendPath(loc, false, false, false, type);
+	}
+
+	public static String resolvePathForce(String loc, FileTypes type) throws IOException
+	{
+		return blendPath(loc, true, false, false, type);
 	}
 
 	public static String pwd(String loc) throws IOException

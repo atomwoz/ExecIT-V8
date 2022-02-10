@@ -76,21 +76,26 @@ public class BasicIO
 		return err;
 	}
 
-	void disableEcho()
+	public void disableEcho()
 	{
 		echo = false;
 	}
 
-	void enableEcho()
+	public void enableEcho()
 	{
 		echo = true;
+	}
+
+	public boolean isEchoing()
+	{
+		return echo;
 	}
 
 	public synchronized void echo(String str)
 	{
 		if (echo)
 		{
-			String toEcho = "..." + str + "...";
+			String toEcho = "[ECHO] " + str + "...";
 			AttributedStringBuilder builder = new AttributedStringBuilder()
 					.style(AttributedStyle.DEFAULT.foreground(AttributedStyle.BRIGHT)).append(toEcho);
 			println(sysInfo.isSupportsAnsi() ? builder.toAnsi() : toEcho);

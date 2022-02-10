@@ -54,9 +54,9 @@ public class StartArgue
 		return startFlags;
 	}
 
-	public boolean hasFlag(String flag, String secondFlag)
+	public boolean hasFlag(String flag, String shortFlag)
 	{
-		return startFlags.contains(flag) || startFlags.contains(secondFlag);
+		return startFlags.contains(flag) || startFlags.contains(shortFlag);
 	}
 
 	public boolean isValueWasDefinied(String valueName)

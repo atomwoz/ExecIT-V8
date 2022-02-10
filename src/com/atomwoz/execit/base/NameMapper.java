@@ -7,6 +7,8 @@ import java.util.HashSet;
 import com.atomwoz.execit.commands.BackgroundCommand;
 import com.atomwoz.execit.commands.ChageDirCommand;
 import com.atomwoz.execit.commands.ClearScreenCommand;
+import com.atomwoz.execit.commands.EchoCommand;
+import com.atomwoz.execit.commands.LsCommand;
 import com.atomwoz.execit.commands.MakeVolumeCommand;
 import com.atomwoz.execit.commands.Print;
 import com.atomwoz.execit.commands.PwdCommand;
@@ -31,13 +33,13 @@ class NameMapper implements Serializable
 		resolver.add(cmd(new String[]
 		{ "print", "println" }, Print.class));
 		resolver.add(cmd(new String[]
-		{ "yes", "garbage", "printloop" }, YesCommand.class));
+		{ "yes", "printloop" }, YesCommand.class));
 		resolver.add(cmd(new String[]
 		{ "tokentest", "tokenizetest" }, TokenizeTest.class));
 		resolver.add(cmd(new String[]
 		{ "mkvol" }, MakeVolumeCommand.class));
 		resolver.add(cmd(new String[]
-		{ "listdisks", "listroots", "listdrives", "showdrives", "showvolumes", "showroots", "showdisks", "diskinfo" },
+		{ "listdisks", "listroots", "listdrives", "showdrives", "showvolumes", "showroots", "showdisks" },
 				ShowDisks.class));
 		resolver.add(cmd(new String[]
 		{ "write", "wr" }, WriteCommand.class));
@@ -48,9 +50,13 @@ class NameMapper implements Serializable
 		resolver.add(cmd(new String[]
 		{ "bg", "background" }, BackgroundCommand.class));
 		resolver.add(cmd(new String[]
-		{ "cd", "changedirectory" }, ChageDirCommand.class));
+		{ "cd" }, ChageDirCommand.class));
 		resolver.add(cmd(new String[]
 		{ "cls", "clear" }, ClearScreenCommand.class));
+		resolver.add(cmd(new String[]
+		{ "echo" }, EchoCommand.class));
+		resolver.add(cmd(new String[]
+		{ "ls" }, LsCommand.class));
 		observerResolver.put("observe", new TestObserver());
 		observerResolver.put("timeout", new TimeoutObserver());
 		observerResolver.put("confirm", new ConfirmObserver());

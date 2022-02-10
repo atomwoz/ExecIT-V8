@@ -23,7 +23,8 @@ public class Main
 				String prompt = PathEngine.getLoc().getFileFullPath();
 				AttributedStringBuilder builder = new AttributedStringBuilder().style(AttributedStyle.DEFAULT)
 						.append('[').style(AttributedStyle.BOLD.foreground(AttributedStyle.BLUE)).append(user)
-						.append(separator).style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN)).append(prompt)
+						.style(AttributedStyle.DEFAULT).append(separator)
+						.style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN)).append(prompt)
 						.style(AttributedStyle.DEFAULT).append("]$> ");
 				String readedLine;
 				synchronized (io)

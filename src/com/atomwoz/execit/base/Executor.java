@@ -90,9 +90,11 @@ public class Executor
 		boolean isExist = false;
 
 		inputArgue = "";
-		for (var x : tokens)
+		int tLen = tokens.length;
+		for (int i = 0; i < tLen; i++)
 		{
-			inputArgue += x + " ";
+			String x = tokens[i];
+			inputArgue += x + (i != tLen - 1 ? " " : "");
 		}
 		// TODO Add start values support
 		for (Pair<String[], Class<? extends CommandBase>> cmdToCheck : mapper)
@@ -165,9 +167,10 @@ public class Executor
 	public static ArrayList<LineArgue> tokenizeInput(String toTokenize)
 	{
 		ArrayList<LineArgue> tokens = new ArrayList<>();
-		String toToken2 = toTokenize.strip() + "\"";
+		String toToken2 = toTokenize.strip() + "\"\"";
 		int lastDeletedPos = 0;
 		boolean isInApostrophe = false;
+		String sliced = null;
 
 		for (int i = 0; i < toToken2.length(); i++)
 		{
@@ -178,14 +181,18 @@ public class Executor
 			if ((ch == ' ' && !isInApostrophe) || onApostrophe)
 			{
 				// Slicer
-				String sliced = toToken2.substring(lastDeletedPos + 1, i);
+				sliced = toToken2.substring(lastDeletedPos + 1, i);
 				if (!sliced.isEmpty())
 				{
 					if (!isInApostrophe)
 					{
 						sliced = sliced.strip();
 					}
-					tokens.add(new LineArgue(sliced.replace("\\\"", "\""), isInApostrophe));
+					if (sliced.endsWith("\""))
+					{
+						sliced = sliced.substring(0, sliced.length() - 1);
+					}
+					tokens.add(new LineArgue(sliced.replace("\\\"", "\"").strip(), isInApostrophe));
 				}
 				lastDeletedPos = i;
 			}
